@@ -1,0 +1,50 @@
+#!/bin/bash
+
+conf="
+numPyramidLevels = 4
+maxTestLevel = 0
+withNormalization = 1
+
+sigmaPriorToCensusTransform = 0.75
+sigmaBitPlanes = 1.6
+
+maxIterations = 100
+parameterTolerance = 1e-6
+functionTolerance = 1e-6
+gradientTolerance = 1e-6
+
+relaxTolerancesForCoarseLevels = 1
+
+lossFunction  = Huber
+verbosity     = Silent
+
+minTranslationMagToKeyFrame       = 0.1
+minRotationMagToKeyFrame          = 2.5
+maxFractionOfGoodPointsToKeyFrame = 0.7
+
+goodPointThreshold = 0.8
+
+DataSet = tsukuba_stereo
+DataSetRootDirectory = ~/data/NewTsukubaStereoDataset/
+Illumination = fluorescent
+DisparityScale = 1.0
+
+StereoAlgorithm = BlockMatching
+SADWindowSize = 9
+minDisparity = 8
+numberOfDisparities = 96
+trySmallerWindows = 1
+ScaleBy = 1
+
+minValidDisparity = 8.1
+maxValidDisparity = 96
+
+Descriptor = BitPlanes
+"
+
+conf_fn=$(mktemp)
+echo "$conf" > $conf_fn
+
+./bin/vo -c $conf_fn -o tsukuba_bitplanes_9_L2 -n 500 \
+  --store-timing --store-iterations -x
+
